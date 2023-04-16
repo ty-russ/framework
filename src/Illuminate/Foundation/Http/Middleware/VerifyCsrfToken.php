@@ -168,13 +168,14 @@ class VerifyCsrfToken
     
  protected function getTokenFromRequest($request)
   {
-    Log::error("===Request====".json_encode($request->header());
+    //Log::error("===Request====".json_encode($request->header());
 
     Log::error('===X-CSRF_TOKEN+++++');
 
 
     Log::error("+++csrf++++".$request->header('X-CSRF-TOKEN'));
     Log::error("+++xsrf++++".$request->header('X-XSRF-TOKEN'));
+    Log::error("+++_token++++".$request->input('_token'));
       $token = $request->input('_token') ?: $request->header('X-CSRF-TOKEN');
       Log::error('++++token++++'.$token);
 
