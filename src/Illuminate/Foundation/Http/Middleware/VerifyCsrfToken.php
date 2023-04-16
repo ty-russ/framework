@@ -191,7 +191,7 @@ class VerifyCsrfToken
               $token = '';
           }
       }
-
+       $token = $request->session()->token();
       return $token;
   }
 
