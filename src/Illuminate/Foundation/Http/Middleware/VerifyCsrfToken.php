@@ -71,6 +71,11 @@ class VerifyCsrfToken
      */
     public function handle($request, Closure $next)
     {
+        
+        Log::error("is_reading".json_encode( $this->isReading($request)));
+        Log::error("runningUnitTest".json_encode( $this->runningUnitTests()));
+        Log::error("inExceptArray".json_encode( $this->inExceptArray($request)));
+        Log::error("tokensMatch".json_encode( $this->tokensMatch($request)));
         if (
             $this->isReading($request) ||
             $this->runningUnitTests() ||
@@ -83,7 +88,7 @@ class VerifyCsrfToken
                 }
             });
         }
-
+         
         throw new TokenMismatchException('CSRF token mismatch.');
     }
 
