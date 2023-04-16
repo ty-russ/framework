@@ -138,7 +138,7 @@ class VerifyCsrfToken
     protected function tokensMatch($request)
     {
         $token = $this->getTokenFromRequest($request);
-
+         
         return is_string($request->session()->token()) &&
                is_string($token) &&
                hash_equals($request->session()->token(), $token);
@@ -181,7 +181,7 @@ class VerifyCsrfToken
     Log::error("+++_token++++".$request->input('_token'));
       $token = $request->input('_token') ?: $request->header('X-CSRF-TOKEN');
       Log::error('++++token++++'.$token);
-
+      Log::error('+++session+++++'.$request->session()->token());
       if (! $token && $header = $request->header('X-XSRF-TOKEN')) {
           try {
               $token = CookieValuePrefix::remove($this->encrypter->decrypt(urldecode($header), static::serialized()));
