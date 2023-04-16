@@ -12,6 +12,8 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Support\InteractsWithTime;
 use Symfony\Component\HttpFoundation\Cookie;
+use Illuminate\Support\Facades\Log;
+
 
 class VerifyCsrfToken
 {
@@ -148,20 +150,43 @@ class VerifyCsrfToken
      * @param  \Illuminate\Http\Request  $request
      * @return string|null
      */
-    protected function getTokenFromRequest($request)
-    {
-        $token = $request->input('_token') ?: $request->header('X-CSRF-TOKEN');
+//     protected function getTokenFromRequest($request)
+//     {
+//         $token = $request->input('_token') ?: $request->header('X-CSRF-TOKEN');
 
-        if (! $token && $header = $request->header('X-XSRF-TOKEN')) {
-            try {
-                $token = CookieValuePrefix::remove($this->encrypter->decrypt($header, static::serialized()));
-            } catch (DecryptException) {
-                $token = '';
-            }
-        }
+//         if (! $token && $header = $request->header('X-XSRF-TOKEN')) {
+//             try {
+//                 $token = CookieValuePrefix::remove($this->encrypter->decrypt($header, static::serialized()));
+//             } catch (DecryptException) {
+//                 $token = '';
+//             }
+//         }
 
-        return $token;
-    }
+//         return $token;
+//     }
+    
+    
+ protected function getTokenFromRequest($request)
+  {
+    Log::error("===Request====".json_encode($request));
+
+    Log::error('===X-CSRF_TOKEN+++++');
+
+
+    Log::error($request->header('X-CSRF-TOKEN'));
+      $token = $request->input('_token') ?: $request->header('X-CSRF-TOKEN');
+      Log::error($token);
+
+      if (! $token && $header = $request->header('X-XSRF-TOKEN')) {
+          try {
+              $token = CookieValuePrefix::remove($this->encrypter->decrypt(urldecode($header), static::serialized()));
+          } catch (DecryptException $e) {
+              $token = '';
+          }
+      }
+
+      return $token;
+  }
 
     /**
      * Determine if the cookie should be added to the response.
