@@ -168,18 +168,21 @@ class VerifyCsrfToken
     
  protected function getTokenFromRequest($request)
   {
-    Log::error("===Request====".json_encode($request));
+    Log::error("===Request====".json_encode($request->header());
 
     Log::error('===X-CSRF_TOKEN+++++');
 
 
-    Log::error($request->header('X-CSRF-TOKEN'));
+    Log::error("+++csrf++++".$request->header('X-CSRF-TOKEN'));
+    Log::error("+++xsrf++++".$request->header('X-XSRF-TOKEN'));
       $token = $request->input('_token') ?: $request->header('X-CSRF-TOKEN');
-      Log::error($token);
+      Log::error('++++token++++'.$token);
 
       if (! $token && $header = $request->header('X-XSRF-TOKEN')) {
           try {
               $token = CookieValuePrefix::remove($this->encrypter->decrypt(urldecode($header), static::serialized()));
+      Log::error('++++serialized++++'.$token);
+              
           } catch (DecryptException $e) {
               $token = '';
           }
